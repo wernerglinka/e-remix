@@ -4,7 +4,7 @@
   "author": "Werner Glinka",
   "description": "",
   "license": "MIT",
-  "repository": "",
+  "repository": "https://github.com/wernerglinka/e-remix",
   "private": true,
   "main": "main/index.js",
   "sideEffects": false,
