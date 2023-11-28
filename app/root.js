@@ -1,4 +1,3 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node"
 import {
 	Links,
 	LiveReload,
@@ -6,12 +5,12 @@ import {
 	Outlet,
 	Scripts,
 	ScrollRestoration,
-} from "@remix-run/react"
-import styles from "./styles.css"
+} from "@remix-run/react";
+import styles from "./styles.css";
 
-export const meta: MetaFunction = () => [{ title: "New Remix App" }]
+export const meta = () => [ { title: "New Remix App" } ];
 
-export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }]
+export const links = () => [ { rel: "stylesheet", href: styles } ];
 
 export default function App() {
 	return (
@@ -23,11 +22,12 @@ export default function App() {
 				<Links />
 			</head>
 			<body>
+				<div class="titlebar"></div>
 				<Outlet />
 				<ScrollRestoration />
 				<Scripts />
 				<LiveReload />
 			</body>
 		</html>
-	)
+	);
 }
