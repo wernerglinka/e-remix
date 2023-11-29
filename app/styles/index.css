@@ -1,3 +1,5 @@
+@import './typography.css';
+
 * {
   box-sizing: border-box;
 }
@@ -61,8 +63,6 @@
       rgb(99, 99, 99) 100%
     ),
     linear-gradient(90deg, rgb(195, 195, 195), rgb(228, 228, 228));
-
-  font-family: sans-serif;
 }
 
 /**
@@ -98,10 +98,22 @@ body {
   background-blend-mode: overlay, overlay, overlay, normal;
   background-repeat: no-repeat;
   background-size: cover;
-  color: var(--font-color);
-  font-family: 'Open Sans', sans-serif;
 }
 
-h1 {
-  margin: 0;
+/**
+ * Welcome page styles
+ */
+.welcome {
+  max-width: 60rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+
+  & img {
+    max-width: 20rem;
+    margin-bottom: 5rem;
+  }
 }

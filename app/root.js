@@ -6,7 +6,7 @@ import {
 	Scripts,
 	ScrollRestoration,
 } from "@remix-run/react";
-import styles from "./styles.css";
+import styles from "./styles/index.css";
 
 export const meta = () => [ { title: "New Remix App" } ];
 
@@ -22,7 +22,7 @@ export default function App() {
 				<Links />
 			</head>
 			<body>
-				<div class="titlebar"></div>
+				<div className="titlebar"></div>
 				<Outlet />
 				<ScrollRestoration />
 				<Scripts />
