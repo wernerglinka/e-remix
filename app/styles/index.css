@@ -101,10 +101,30 @@ body {
 }
 
 /**
+ * Screen Transitions
+ */
+.fade-enter {
+  opacity: 0;
+}
+.fade-exit {
+  opacity: 1;
+}
+.fade-enter-active {
+  opacity: 1;
+}
+.fade-exit-active {
+  opacity: 0;
+}
+.fade-enter-active,
+.fade-exit-active {
+  transition: opacity 500ms;
+}
+
+/**
  * Welcome page styles
  */
 .welcome {
-  max-width: 60rem;
+  max-width: 80rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -113,7 +133,7 @@ body {
   height: 100vh;
 
   & img {
-    max-width: 20rem;
+    max-width: 15rem;
     margin-bottom: 5rem;
   }
 }

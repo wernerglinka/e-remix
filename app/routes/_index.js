@@ -9,7 +9,10 @@ export function loader() {
 }
 
 export default function Index() {
-  const data = useLoaderData();
+  // fix to make screen transitions work.
+  // See: https://www.jacobparis.com/content/remix-animated-page-transitions
+  const data = useLoaderData() || {};
+
   const recentProjects = [
     {
       name: "Project 1",
@@ -39,10 +42,10 @@ export default function Index() {
       <p>Metallurgy, a specialized CMS tailored for Metalsmith, transforms the content management experience with its emphasis on simplicity and accessibility. Moving away from conventional code editors, it offers a form-based user interface along with an WYSIWYG Markdown editor. Additionally, Metallurgy ensures secure and organized content storage by keeping all data in a GitHub repository, facilitating easy version control and collaboration.</p>
       <ul className="projects">
         <li>
-          <Link to="/"><FolderOpen />Open a Project</Link>
+          <Link to="/open-project"><FolderOpen />Open a Project</Link>
         </li>
         <li>
-          <Link to="/new"><FolderPlus />Create a New Project</Link>
+          <Link to="/new-project"><FolderPlus />Create a New Project</Link>
         </li>
         <li className="listHeader"><FolderCog />Recent</li>
         { recentProjects.map( ( project, index ) => (
