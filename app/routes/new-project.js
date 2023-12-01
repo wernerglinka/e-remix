@@ -1,6 +1,10 @@
 import { Link, useLoaderData } from "@remix-run/react";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function NewProject() {
+
+  const dataPath = useLocalStorage( "userDataPath" );
+  console.log( "dataPath: ", dataPath );
 
   return (
     <main className="new-project">
@@ -8,4 +12,4 @@ export default function NewProject() {
       <Link to="/">Back</Link>
     </main>
   );
-}
+};

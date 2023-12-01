@@ -58,7 +58,6 @@ export default function App() {
 					</CSSTransition>
 				</SwitchTransition>
 
-
 				<ScrollRestoration />
 				<Scripts />
 				<LiveReload />

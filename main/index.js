@@ -1,10 +1,6 @@
 const { initRemix } = require( 'remix-electron' );
 const { app, BrowserWindow, dialog } = require( 'electron' );
 const path = require( 'node:path' );
-const {
-  default: installExtension,
-  REACT_DEVELOPER_TOOLS
-} = require( 'electron-devtools-installer' );
 
 const isDev = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
@@ -47,10 +43,6 @@ async function createWindow( url ) {
 app.on( 'ready', () => {
   void ( async () => {
     try {
-      if ( process.env.NODE_ENV === 'development' ) {
-        await installExtension( REACT_DEVELOPER_TOOLS );
-      }
-
       const url = await initRemix( {
         serverBuild: path.join( __dirname, '../build/index.js' )
       } );

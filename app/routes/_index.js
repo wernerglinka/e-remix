@@ -1,6 +1,8 @@
 import { Link, useLoaderData } from "@remix-run/react";
 import electron from "../electron.server";
 import { FolderPlus, FolderOpen, FolderCog } from 'lucide-react';
+import { useEffect } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export function loader() {
   return {
@@ -13,6 +15,10 @@ export default function Index() {
   // See: https://www.jacobparis.com/content/remix-animated-page-transitions
   const data = useLoaderData() || {};
 
+  //const [ userDataPath, setUserDataPath ] = useLocalStorage( "userDataPath", data.userDataPath );
+  useLocalStorage( "userDataPath", data.userDataPath );
+
+  // This is to test the recent projects list. Delete this later.//////////////
   const recentProjects = [
     {
       name: "Project 1",
@@ -35,26 +41,30 @@ export default function Index() {
       path: "/projects/5",
     },
   ];
+  /////////////////////////////////////////////////////////////////////////////
+
   return (
     <main className="welcome">
-      <img src="/images/metallurgy-logo.png" alt="Metallurgy Logo" />
-      <h1>Welcome to Metallurgy</h1>
-      <p>Metallurgy, a specialized CMS tailored for Metalsmith, transforms the content management experience with its emphasis on simplicity and accessibility. Moving away from conventional code editors, it offers a form-based user interface along with an WYSIWYG Markdown editor. Additionally, Metallurgy ensures secure and organized content storage by keeping all data in a GitHub repository, facilitating easy version control and collaboration.</p>
+      <h1>Metallurgy</h1>
+      <p>Content Management for Metalsmith refined</p>
+
       <ul className="projects">
+        <li className="listHeader">Start</li>
         <li>
           <Link to="/open-project"><FolderOpen />Open a Project</Link>
         </li>
         <li>
           <Link to="/new-project"><FolderPlus />Create a New Project</Link>
         </li>
-        <li className="listHeader"><FolderCog />Recent</li>
+        <li className="listHeader">Recent</li>
         { recentProjects.map( ( project, index ) => (
           <li className="recent" key={ index }>
-            <Link to={ project.path }>{ project.name }</Link>
+            { project.name }
+            <Link to={ project.path }>{ project.path }</Link>
           </li>
         ) ) }
       </ul>
-      <p>User data path: { data.userDataPath }</p>
+
     </main>
   );
 }
