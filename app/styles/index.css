@@ -94,7 +94,7 @@
  */
 .btn {
   display: inline-block;
-  padding: 0.5rem 1rem;
+  padding: 1rem 2rem;
   margin: 0 0.5rem;
   border-radius: 0.5rem;
   border: none;
@@ -112,6 +112,11 @@
 
   &:active {
     transform: scale(0.95);
+  }
+
+  &.primary {
+    background-color: var(--attention-color);
+    color: #ffffff;
   }
 }
 
@@ -205,13 +210,36 @@ body {
   background-color: var(--info-background);
   box-shadow: var(--drop-shadow);
 
+  & p {
+    margin-bottom: 1rem;
+  }
+
   & ul {
     list-style: none;
     padding: 0;
-    margin: 3rem 0 0;
+    margin: 2rem 0 0;
 
     & li {
-      margin-bottom: 2rem;
+      padding: 1rem 0;
+
+      & strong {
+        display: inline-block;
+        width: 15rem;
+        font-size: 0.8em;
+      }
+
+      &.decision-buttons {
+        display: flex;
+        margin-top: 3rem;
+
+        & .btn {
+          margin: 0 2rem;
+
+          &:first-child {
+            margin-left: 0;
+          }
+        }
+      }
     }
   }
 }

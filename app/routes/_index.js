@@ -14,9 +14,12 @@ export default function Index() {
   // fix to make screen transitions work.
   // See: https://www.jacobparis.com/content/remix-animated-page-transitions
   const data = useLoaderData() || {};
-
-  //const [ userDataPath, setUserDataPath ] = useLocalStorage( "userDataPath", data.userDataPath );
-  useLocalStorage( "userDataPath", data.userDataPath );
+  // store the userDataPath in sessionStorage
+  useEffect( () => {
+    // clear session storage - blank slate
+    sessionStorage.clear();
+    sessionStorage.setItem( "userDataPath", data.userDataPath );
+  }, [] );
 
   // This is to test the recent projects list. Delete this later.//////////////
   const recentProjects = [

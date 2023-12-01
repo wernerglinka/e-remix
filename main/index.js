@@ -1,6 +1,7 @@
 const { initRemix } = require( 'remix-electron' );
 const { app, BrowserWindow, dialog } = require( 'electron' );
-const path = require( 'node:path' );
+const path = require( 'path' );
+const fs = require( 'fs' );
 
 const isDev = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
