@@ -3,6 +3,9 @@ import { json, redirect } from "@remix-run/node";
 import electron from "../../electron.server";
 import { useState, useEffect } from "react";
 
+import getFolderName from "../../utils/getFolderName";
+import SingleButtonForm from "../../components/SingleButtonForm";
+
 import path from "path";
 import fs from "fs";
 
@@ -107,12 +110,13 @@ export const action = async ( { request } ) => {
   return "nothing's happening";
 };
 
-
+/*
 const SingleButtonForm = ( { addClasses = "", action, submitValue, buttonText } ) => (
   <Form style={ { display: "inline" } } method="post" action={ action }>
     <button className={ `btn ${ addClasses }` } type="submit" name="_action" value={ submitValue }>{ buttonText }</button>
   </Form >
 );
+
 
 const getFolderName = ( searchString, path ) => {
   if ( !path ) return "";
@@ -122,6 +126,7 @@ const getFolderName = ( searchString, path ) => {
   }
   return "";
 };
+*/
 
 export default function NewProject() {
   // fix to make screen transitions work.
@@ -165,6 +170,13 @@ export default function NewProject() {
   const contentFolderName = getFolderName( projectFolderName, contentFolderPath );
   const dataFolderName = getFolderName( projectFolderName, dataFolderPath );
 
+  const fields = [
+    { name: "projectPath", value: projectFolderPath },
+    { name: "contentPath", value: contentFolderPath },
+    { name: "dataPath", value: dataFolderPath },
+  ];
+
+
   return (
     <main className="new-project">
       <h1>New Project</h1>
@@ -178,17 +190,34 @@ export default function NewProject() {
           { contentFolderName ? (
             <li><strong>Content folder :</strong> /{ contentFolderName }</li>
           ) : (
-            <li>Select the content folder <SingleButtonForm action="/new-project" submitValue="getContentFolder" buttonText="Get Content Folder" /></li>
+            <li>Select the content folder
+              <SingleButtonForm
+                action="/new-project"
+                submitValue="getContentFolder"
+                buttonText="Get Content Folder"
+              />
+            </li>
           ) }
           { dataFolderName ? (
             <li><strong>Data folder :</strong> /{ dataFolderName }</li>
           ) : (
-            <li>Select the data folder <SingleButtonForm action="/new-project" submitValue="getDataFolder" buttonText="Get Data Folder" /></li>
+            <li>Select the data folder
+              <SingleButtonForm
+                action="/new-project"
+                submitValue="getDataFolder"
+                buttonText="Get Data Folder"
+              />
+            </li>
           ) }
           {
             !( contentFolderName && dataFolderName ) && (
               <li className="decision-buttons" >
-                <SingleButtonForm addClasses="secondary" action="/new-project" submitValue="startOver" buttonText="Start Over" />
+                <SingleButtonForm
+                  addClasses="secondary"
+                  action="/new-project"
+                  submitValue="startOver"
+                  buttonText="Start Over"
+                />
               </li>
             )
           }
@@ -196,14 +225,19 @@ export default function NewProject() {
             contentFolderName && dataFolderName && (
               <>
                 <li className="decision-buttons" >
-                  <Form style={ { display: "inline" } } method="post" action="/new-project">
-                    <input type="hidden" name="projectPath" value={ projectFolderPath } />
-                    <input type="hidden" name="contentPath" value={ contentFolderPath } />
-                    <input type="hidden" name="dataPath" value={ dataFolderPath } />
-                    <button className="btn primary" type="submit" name="_action" value="commitProjectData">Start Project</button>
-                  </Form >
-
-                  <SingleButtonForm addClasses="secondary" action="/new-project" submitValue="startOver" buttonText="Start Over" />
+                  <SingleButtonForm
+                    addClasses="primary"
+                    action="/new-project"
+                    submitValue="commitProjectData"
+                    buttonText="Start Project"
+                    fields={ fields }
+                  />
+                  <SingleButtonForm
+                    addClasses="secondary"
+                    action="/new-project"
+                    submitValue="startOver"
+                    buttonText="Start Over"
+                  />
                 </li>
               </>
             )
