@@ -196,16 +196,23 @@ body {
       & svg {
         margin-right: 1rem;
       }
+
+      &.preview a {
+        opacity: 0.5;
+        pointer-events: none;
+        cursor: default;
+      }
     }
   }
 }
 
 /**
- * Instructions to user on how to proceed
+ * process box styles
  */
-.how-to-proceed {
+.process-box {
   max-width: 50rem;
   padding: 2rem;
+  border-radius: 1rem;
   margin: 5rem auto 0;
   background-color: var(--info-background);
   box-shadow: var(--drop-shadow);

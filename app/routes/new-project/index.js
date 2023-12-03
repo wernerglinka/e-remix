@@ -1,4 +1,4 @@
-import { useLoaderData, useActionData, Form } from "@remix-run/react";
+import { useLoaderData, useActionData } from "@remix-run/react";
 import { json, redirect } from "@remix-run/node";
 import electron from "../../electron.server";
 import { useState, useEffect } from "react";
@@ -8,6 +8,11 @@ import SingleButtonForm from "../../components/SingleButtonForm";
 
 import path from "path";
 import fs from "fs";
+
+import styles from "./styles.css";
+export const links = () => [
+  { rel: "stylesheet", href: styles },
+];
 
 
 /**
@@ -40,7 +45,7 @@ export const shouldRevalidate = () => false;
 
 /**
  * @function action
- * @param {qobject} request 
+ * @param {object} request 
  * @returns {*} Returns either a redirect or a JSON object
  * @note In a Remix server action, we are using node's path module. We directly
  *     require the path module from Node.js, not through Electron. This is 
@@ -78,58 +83,50 @@ export const action = async ( { request } ) => {
     const fileContent = JSON.stringify( projectData );
     fs.writeFileSync( filePath, fileContent );
 
+    // prepare the search params for the redirect
+    const searchParams = new URLSearchParams( {
+      projectPath: projectData.projectPath,
+      contentPath: projectData.contentPath,
+      dataPath: projectData.dataPath,
+    } );
+
     // redirect to the open project page
-    return redirect( '/open-project' );
+    return redirect( `/open-project/?${ searchParams }` );
   }
 
-  const folderActions = [ 'getProjectFolder', 'getContentFolder', 'getDataFolder' ];
-  const folderMessages = {
-    getProjectFolder: "Select the Project Folder",
-    getContentFolder: "Select the Content Folder",
-    getDataFolder: "Select the Data Folder",
-  };
-  const neededPath = {
-    getProjectFolder: "projectPath",
-    getContentFolder: "contentPath",
-    getDataFolder: "dataPath",
-  };
-
-  if ( folderActions.includes( _action ) ) {
+  if ( _action === "getProjectFolder" || _action === "getContentFolder" || _action === "getDataFolder" ) {
+    let userInstruction;
+    let pathLabel;
+    if ( _action === "getProjectFolder" ) {
+      userInstruction = "Get Project Folder";
+      pathLabel = "projectPath";
+    }
+    if ( _action === "getContentFolder" ) {
+      userInstruction = "Get Content Folder";
+      pathLabel = "contentPath";
+    }
+    if ( _action === "getDataFolder" ) {
+      userInstruction = "Get Data Folder";
+      pathLabel = "dataPath";
+    }
     const options = {
-      message: folderMessages[ _action ],
+      message: userInstruction,
       properties: [ "openDirectory" ],
     };
-
     const userChoice = await electron.dialog.showOpenDialog( options );
+
     if ( userChoice.canceled ) {
-      return json( { message: "User canceled the dialog.", actionStatus: "canceled" } );
+      return json( { message: "User canceled the dialog." } );
     }
 
-    return json( { [ neededPath[ _action ] ]: userChoice.filePaths[ 0 ], actionStatus: "ok" } );
+    return json( { [ pathLabel ]: userChoice.filePaths[ 0 ] } );
   }
   return "nothing's happening";
 };
 
-/*
-const SingleButtonForm = ( { addClasses = "", action, submitValue, buttonText } ) => (
-  <Form style={ { display: "inline" } } method="post" action={ action }>
-    <button className={ `btn ${ addClasses }` } type="submit" name="_action" value={ submitValue }>{ buttonText }</button>
-  </Form >
-);
-
-
-const getFolderName = ( searchString, path ) => {
-  if ( !path ) return "";
-  const startIndex = path.indexOf( searchString );
-  if ( startIndex !== -1 ) {
-    return path.substring( startIndex );
-  }
-  return "";
-};
-*/
 
 export default function NewProject() {
-  // fix to make screen transitions work.
+  // " ... || {} " fix to make screen transitions work.
   // See: https://www.jacobparis.com/content/remix-animated-page-transitions
   const { projectPath } = useLoaderData() || {};
 
@@ -143,33 +140,41 @@ export default function NewProject() {
   const [ contentFolderPath, setContentFolderPath ] = useState( '' );
   const [ dataFolderPath, setDataFolderPath ] = useState( '' );
 
+  // Store the contentPath and dataPath in sessionStorage
+  // so we don't lose them when we navigate to the open-project page.
   useEffect( () => {
-    // Retrieve data from sessionStorage on component mount
     const storedData = sessionStorage.getItem( 'contentPath' );
     if ( storedData ) {
+      // if there is stored data, update the state variable
       setContentFolderPath( storedData );
     } else {
+      // if there is no stored data, update the state variable
       setContentFolderPath( contentPath );
+      // and store the data in sessionStorage
       sessionStorage.setItem( 'contentPath', contentPath );
     }
   }, [ contentPath ] );
 
   useEffect( () => {
-    // Retrieve data from sessionStorage on component mount
     const storedData = sessionStorage.getItem( 'dataPath' );
     if ( storedData ) {
+      // if there is stored data, update the state variable
       setDataFolderPath( storedData );
     } else {
+      // if there is no stored data, update the state variable
       setDataFolderPath( dataPath );
+      // and store the data in sessionStorage
       sessionStorage.setItem( 'dataPath', dataPath );
     }
   }, [ dataPath ] );
 
-  // extracting the folder names from the paths
+  // extracting the folder names from the paths to show in the UI
   const projectFolderName = projectFolderPath && projectFolderPath.split( "/" ).pop();
   const contentFolderName = getFolderName( projectFolderName, contentFolderPath );
   const dataFolderName = getFolderName( projectFolderName, dataFolderPath );
 
+  // Prepare the fields for the form that will be submitted once we have all the data
+  // needed to create the project settings file.
   const fields = [
     { name: "projectPath", value: projectFolderPath },
     { name: "contentPath", value: contentFolderPath },
@@ -179,10 +184,10 @@ export default function NewProject() {
 
   return (
     <main className="new-project">
-      <h1>New Project</h1>
+      <h1>Metallurgy</h1>
+      <p>Define a New Project</p>
 
-      <div className="how-to-proceed">
-        <h2>Project Structure</h2>
+      <div>
         <p>To start working on a new project we need the paths to the content folder which contains the markdown content and the data folder which contains metadata files that are being used to build pages.</p>
 
         <ul>

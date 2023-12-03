@@ -59,6 +59,9 @@ export default function Index() {
         <li>
           <Link to="/new-project"><FolderPlus />Create a New Project</Link>
         </li>
+        <li className="preview">
+          <Link to="/"><FolderPlus />Clone Github Repo as New Project (Coming soon...)</Link>
+        </li>
         <li className="listHeader">Recent</li>
         { recentProjects.map( ( project, index ) => (
           <li className="recent" key={ index }>
